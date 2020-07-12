@@ -51,9 +51,8 @@ namespace IOLApiClient.Auth.Repository.Repositories
             using (var client = new HttpClient())
             {
                 BuildDefaultHeaders(client);
-                var parameters = BuildLoginPostParameters();
 
-                using (var content = new FormUrlEncodedContent(parameters))
+                using (var content = new FormUrlEncodedContent(BuildLoginPostParameters()))
                 {
                     BuildLoginContent(content);
 

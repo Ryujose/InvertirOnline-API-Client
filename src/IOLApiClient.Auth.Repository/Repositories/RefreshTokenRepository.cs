@@ -19,7 +19,8 @@ namespace IOLApiClient.Auth.Repository.Repositories
         static string _methodRefreshTokenMessageDiagnose = $"Method: {nameof(RefreshToken)}";
         static string _methodBuildTokenURLMessageDiagnose = $"Method: {nameof(BuildTokenURL)}";
         static string _methodLogLoginRespondeModelMessageDiagnose = $"Method: {nameof(LogLoginRespondeModel)}";
-
+        static string _methodBuildDefaultHeadersMessageDiagnose = $"Method: {nameof(BuildDefaultHeaders)}";
+        static string _methodRefreshTokenPostParametersMessageDiagnose = $"Method: {nameof(BuildRefreshTokenPostParameters)}";
 
         const string _GRANT_TYPE_REFRESH_TOKEN_POST_VALUE = "refresh_token";
         const string _GRANT_TYPE_POST_KEY = "grant_type";
@@ -43,20 +44,9 @@ namespace IOLApiClient.Auth.Repository.Repositories
         {
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
-                client.DefaultRequestHeaders.Add("User-Agent", ".NET-Core-3.1-client");
-                client.DefaultRequestHeaders.Add("Connection", "keep-alive");
-                client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
-                client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
+                BuildDefaultHeaders(client);
 
-                var parameters = new Dictionary<string, string>
-                {
-                    { _GRANT_TYPE_POST_KEY, _GRANT_TYPE_REFRESH_TOKEN_POST_VALUE },
-                    { _GRANT_TYPE_REFRESH_TOKEN_POST_VALUE, _bearerTokenData.LoginResponseModel.RefreshToken }
-                };
-
-                using (var content = new FormUrlEncodedContent(parameters))
+                using (var content = new FormUrlEncodedContent(BuildRefreshTokenPostParameters()))
                 {
                     var result = await client.PostAsync(BuildTokenURL(), content);
 
@@ -77,6 +67,48 @@ namespace IOLApiClient.Auth.Repository.Repositories
                     _bearerTokenData.SetLoginResponseModel(loginResponseModel);
                 }
             }
+        }
+
+        private void BuildDefaultHeaders(HttpClient client)
+        {
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+            client.DefaultRequestHeaders.Add("User-Agent", ".NET-Core-3.1-client");
+            client.DefaultRequestHeaders.Add("Connection", "keep-alive");
+            client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
+            client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
+
+            if (_logger.IsEnabled(LogEventLevel.Debug))
+            {
+                foreach (var defaultRequestHeader in client.DefaultRequestHeaders)
+                {
+                    IEnumerable<string> values = defaultRequestHeader.Value;
+
+                    foreach (var value in values)
+                    {
+                        _logger.Debug($"{_classRefreshTokenMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
+                    }
+                }
+            }
+        }
+
+        private Dictionary<string, string> BuildRefreshTokenPostParameters()
+        {
+            var result = new Dictionary<string, string>
+            {
+                { _GRANT_TYPE_POST_KEY, _GRANT_TYPE_REFRESH_TOKEN_POST_VALUE },
+                { _GRANT_TYPE_REFRESH_TOKEN_POST_VALUE, _bearerTokenData.LoginResponseModel.RefreshToken }
+            };
+
+            if (_logger.IsEnabled(LogEventLevel.Debug))
+            {
+                foreach (var item in result)
+                {
+                    _logger.Debug($"{_classRefreshTokenMessageDiagnose} {_methodRefreshTokenPostParametersMessageDiagnose}, parameters post key: {item.Key}, value: {item.Value}");
+                }
+            }
+
+            return result;
         }
 
         private string BuildTokenURL()
