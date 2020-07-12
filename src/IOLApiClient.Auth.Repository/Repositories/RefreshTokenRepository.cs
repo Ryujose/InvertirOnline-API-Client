@@ -47,6 +47,9 @@ namespace IOLApiClient.Auth.Repository.Repositories
         {
             _logger.Information($"{_classRefreshTokenMessageDiagnose} {_methodRefreshTokenMessageDiagnose}, Initializing refresh token...");
 
+            if (_bearerTokenData.LoginResponseModel == null)
+                throw new InvalidOperationException($"{nameof(IBearerTokenDataProvider.LoginResponseModel)} is null, can't refresh token.");
+
             if (string.IsNullOrEmpty(_bearerTokenData.LoginResponseModel.RefreshToken))
                 throw new InvalidOperationException($"{nameof(IBearerTokenDataProvider.LoginResponseModel.RefreshToken)} is null or empty, can't refresh token.");
 
