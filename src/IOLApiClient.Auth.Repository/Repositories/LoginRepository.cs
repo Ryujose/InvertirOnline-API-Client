@@ -44,9 +44,21 @@ namespace IOLApiClient.Auth.Repository.Repositories
             _logger = logger;
         }
 
+        /// <summary>
+        /// Login method to obtain token data that will be store in IBearerTokenDataProvider
+        /// </summary>
         public async Task Login()
         {
             _logger.Information($"{_classLogMessageDiagnose} {_methodLoginMessageDiagnose}, Initializing login...");
+
+            if (string.IsNullOrEmpty(_loginRepositorySettings.UserNameIOLClient))
+                throw new InvalidOperationException($"{nameof(ILoginRepositorySettings.UserNameIOLClient)} is null or empty, can't login.");
+
+            if (string.IsNullOrEmpty(_loginRepositorySettings.PasswordIOLClient))
+                throw new InvalidOperationException($"{nameof(ILoginRepositorySettings.PasswordIOLClient)} is null or empty, can't login.");
+
+            if (string.IsNullOrEmpty(_loginRepositorySettings.BaseUrl))
+                throw new InvalidOperationException($"{nameof(ILoginRepositorySettings.BaseUrl)} is null or empty, can't login.");
 
             using (var client = new HttpClient())
             {
