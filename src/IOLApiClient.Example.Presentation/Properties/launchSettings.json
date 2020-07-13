@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "local": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "RUNTIME_ENVIRONMENT": "local"
+      }
+    }
+  }
+}

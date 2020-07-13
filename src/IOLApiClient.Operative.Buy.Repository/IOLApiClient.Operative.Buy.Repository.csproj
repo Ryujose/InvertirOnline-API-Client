@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IOLApiClient.Operative.Buy.Repository.Abstractions\IOLApiClient.Operative.Buy.Repository.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
