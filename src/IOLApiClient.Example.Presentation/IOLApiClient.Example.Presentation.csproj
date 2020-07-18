@@ -21,6 +21,14 @@
     <ProjectReference Include="..\IOLApiClient.DataStorage.Abstractions\IOLApiClient.DataStorage.Abstractions.csproj" />
     <ProjectReference Include="..\IOLApiClient.DataStorage\IOLApiClient.DataStorage.csproj" />
     <ProjectReference Include="..\IOLApiClient.Example.Presentation.Abstractions\IOLApiClient.Example.Presentation.Abstractions.csproj" />
+    <ProjectReference Include="..\IOLApiClient.MyAccount.Operations.Repository.Abstractions\IOLApiClient.MyAccount.Operations.Repository.Abstractions.csproj" />
+    <ProjectReference Include="..\IOLApiClient.MyAccount.Operations.Repository\IOLApiClient.MyAccount.Operations.Repository.csproj" />
+    <ProjectReference Include="..\IOLApiClient.Operative.Buy.Repository.Abstractions\IOLApiClient.Operative.Buy.Repository.Abstractions.csproj" />
+    <ProjectReference Include="..\IOLApiClient.Operative.Buy.Repository\IOLApiClient.Operative.Buy.Repository.csproj" />
+    <ProjectReference Include="..\IOLApiClient.Operative.Sell.Repository.Abstractions\IOLApiClient.Operative.Sell.Repository.Abstractions.csproj" />
+    <ProjectReference Include="..\IOLApiClient.Operative.Sell.Repository\IOLApiClient.Operative.Sell.Repository.csproj" />
+    <ProjectReference Include="..\IOLApiClient.Operative.Subscription.Repository.Abstractions\IOLApiClient.Operative.Subscription.Repository.Abstractions.csproj" />
+    <ProjectReference Include="..\IOLApiClient.Operative.Subscription.Repository\IOLApiClient.Operative.Subscription.Repository.csproj" />
   </ItemGroup>
 
   <ItemGroup>

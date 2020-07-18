@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IOLApiClient.Communication.Abstractions\IOLApiClient.Communication.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

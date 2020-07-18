@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IOLApiClient.DataStorage.Abstractions\IOLApiClient.DataStorage.Abstractions.csproj" />
+    <ProjectReference Include="..\IOLApiClient.Operative.Retrieval.Repository.Abstractions\IOLApiClient.Operative.Retrieval.Repository.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

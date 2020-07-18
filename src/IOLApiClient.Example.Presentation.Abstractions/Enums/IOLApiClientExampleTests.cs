@@ -7,6 +7,11 @@ namespace IOLApiClient.Example.Presentation.Abstractions.Enums
     public enum IOLApiClientExampleTests
     {
         Login = 1,
-        LoginAndRefreshToken = 2
+        LoginAndRefreshToken,
+        LoginAndBuy,
+        LoginAndSell,
+        LoginAndBuyAndCancelTransaction,
+        LoginAndSubscription,
+        LoginAndBuyAndGetOperation
     }
 }

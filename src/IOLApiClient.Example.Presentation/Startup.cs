@@ -4,6 +4,14 @@ using IOLApiClient.Auth.Repository.Repositories;
 using IOLApiClient.DataStorage;
 using IOLApiClient.DataStorage.Abstractions;
 using IOLApiClient.Example.Presentation.Abstractions;
+using IOLApiClient.MyAccount.Operations.Repository.Abstractions.Interfaces.V2;
+using IOLApiClient.MyAccount.Operations.Repository.Repositories.V2;
+using IOLApiClient.Operative.Buy.Repository.Abstractions.Interfaces.V2;
+using IOLApiClient.Operative.Buy.Repository.Repositories.V2;
+using IOLApiClient.Operative.Sell.Repository.Abstractions.Interfaces.V2;
+using IOLApiClient.Operative.Sell.Repository.Repositories.V2;
+using IOLApiClient.Operative.Subscription.Repository.Abstractions.Interfaces.V2;
+using IOLApiClient.Operative.Subscription.Repository.Repositories.V2;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -22,7 +30,11 @@ namespace IOLApiClient.Example.Presentation
 
             serviceCollection
                 .AddSingleton<ILoginRepository, LoginRepository>()
+                .AddSingleton<IBuyRepository, BuyRepository>()
+                .AddSingleton<ISellRepository, SellRepository>()
                 .AddSingleton<IRefreshTokenRepository, RefreshTokenRepository>()
+                .AddSingleton<IOperationsRepository, OperationsRepository>()
+                .AddSingleton<ISubscriptionRepository, SubscriptionRepository>()
                 .AddSingleton<IBearerTokenDataProvider, BearerTokenData>()
                 .AddTransient<IConfigurationBuilder, ConfigurationBuilder>()
                 .AddSingleton<ILogger>(new LoggerConfiguration()
