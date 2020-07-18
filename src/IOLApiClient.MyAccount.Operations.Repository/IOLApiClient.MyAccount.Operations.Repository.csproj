@@ -31,5 +31,16 @@
     <ProjectReference Include="..\IOLApiClient.DataStorage.Abstractions\IOLApiClient.DataStorage.Abstractions.csproj" />
     <ProjectReference Include="..\IOLApiClient.MyAccount.Operations.Repository.Abstractions\IOLApiClient.MyAccount.Operations.Repository.Abstractions.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\IOLAPIClientICO.PNG">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
