@@ -2,6 +2,39 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>MIT License - Copyright (c) 2020 Jose Luis Guerra Infante</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageProjectUrl>https://github.com/Ryujose/InvertirOnline-API-Client</PackageProjectUrl>
+    <Company />
+    <Authors>Jose Luis Guerra Infante</Authors>
+    <Product>invertirOnline.com API Authorization lib</Product>
+    <Description>
+      With these lib you can do a retrieval of a subscription on https://www.invertironline.com/ company.
+
+      To do these you've to create the account and enable the API product.
+    </Description>
+    <PackageIcon>IOLAPIClientICO.PNG</PackageIcon>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryType>OpenSource</RepositoryType>
+    <RepositoryUrl>https://github.com/Ryujose/InvertirOnline-API-Client</RepositoryUrl>
+    <PackageReleaseNotes>Abstractions of retrieval from a subscription</PackageReleaseNotes>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IOLApiClient.Communication.Abstractions\IOLApiClient.Communication.Abstractions.csproj" />
+    <ProjectReference Include="..\IOLApiClient.Operative.Abstractions\IOLApiClient.Operative.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\IOLAPIClientICO.PNG">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 </Project>

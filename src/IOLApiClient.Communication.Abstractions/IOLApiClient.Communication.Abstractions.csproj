@@ -10,22 +10,15 @@
     <Authors>Jose Luis Guerra Infante</Authors>
     <Product>invertirOnline.com API Authorization lib</Product>
     <Description>
-      With these lib you can do a sell of an stock market on https://www.invertironline.com/ company.
-
-      To do these you've to create the account and enable the API product.
+      Abstractions of communication objects
     </Description>
     <PackageIcon>IOLAPIClientICO.PNG</PackageIcon>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryType>OpenSource</RepositoryType>
     <RepositoryUrl>https://github.com/Ryujose/InvertirOnline-API-Client</RepositoryUrl>
-    <PackageReleaseNotes>Abstractions of sell an stock</PackageReleaseNotes>
+    <PackageReleaseNotes>Abstractions of communication objects</PackageReleaseNotes>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\IOLApiClient.Communication.Abstractions\IOLApiClient.Communication.Abstractions.csproj" />
-    <ProjectReference Include="..\IOLApiClient.Operative.Abstractions\IOLApiClient.Operative.Abstractions.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\LICENSE">
