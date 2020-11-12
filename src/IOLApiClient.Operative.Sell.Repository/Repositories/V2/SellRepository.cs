@@ -4,8 +4,7 @@ using IOLApiClient.Communication.Abstractions.Models.Interfaces;
 using IOLApiClient.DataStorage.Abstractions;
 using IOLApiClient.Operative.Abstractions.Models;
 using IOLApiClient.Operative.Sell.Repository.Abstractions.Interfaces.V2;
-using Serilog;
-using Serilog.Events;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -25,12 +24,12 @@ namespace IOLApiClient.Operative.Sell.Repository.Repositories.V2
         static string _methodBuildSellURLMessageDiagnose = $"Method: {nameof(BuildSellURL)}";
 
         private readonly IBearerTokenDataProvider _bearerTokenDataProvider;
-        private readonly ILogger _logger;
+        private readonly ILogger<SellRepository> _logger;
         private readonly ILoginRepositorySettings _loginRepositorySettings;
 
         public SellRepository(
             IBearerTokenDataProvider bearerTokenDataProvider,
-            ILogger logger,
+            ILogger<SellRepository> logger,
             ILoginRepositorySettings loginRepositorySettings)
         {
             _bearerTokenDataProvider = bearerTokenDataProvider;
@@ -44,7 +43,7 @@ namespace IOLApiClient.Operative.Sell.Repository.Repositories.V2
             {
                 BuildDefaultHeaders(client);
 
-                _logger.Information($"{_classSellRepositoryMessageDiagnose} {_methodBuyMessageDiagnose}, Initializing sell...");
+                _logger.LogInformation($"{_classSellRepositoryMessageDiagnose} {_methodBuyMessageDiagnose}, Initializing sell...");
 
                 if (_bearerTokenDataProvider.LoginResponseModel == null)
                     throw new InvalidOperationException($"{nameof(IBearerTokenDataProvider.LoginResponseModel)} is null, can't sell.");
@@ -57,7 +56,7 @@ namespace IOLApiClient.Operative.Sell.Repository.Repositories.V2
                 {
                     var result = await client.PostAsync(BuildSellURL(), content);
 
-                    _logger.Information($"{_classSellRepositoryMessageDiagnose} {_methodBuyMessageDiagnose}, {(result != null ? $"Sell result code: {result.StatusCode}" : "Sell is null")}");
+                    _logger.LogInformation($"{_classSellRepositoryMessageDiagnose} {_methodBuyMessageDiagnose}, {(result != null ? $"Sell result code: {result.StatusCode}" : "Sell is null")}");
 
                     result.EnsureSuccessStatusCode();
 
@@ -104,9 +103,9 @@ namespace IOLApiClient.Operative.Sell.Repository.Repositories.V2
         {
             var buyURL = $"{_loginRepositorySettings.BaseUrl}/api/v2/operar/Vender";
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.Debug($"{_classSellRepositoryMessageDiagnose} {_methodBuildSellURLMessageDiagnose}, BuildSellURL: {buyURL}");
+                _logger.LogDebug($"{_classSellRepositoryMessageDiagnose} {_methodBuildSellURLMessageDiagnose}, BuildSellURL: {buyURL}");
             }
 
             return buyURL;
@@ -122,7 +121,7 @@ namespace IOLApiClient.Operative.Sell.Repository.Repositories.V2
             client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
                 foreach (var defaultRequestHeader in client.DefaultRequestHeaders)
                 {
@@ -130,7 +129,7 @@ namespace IOLApiClient.Operative.Sell.Repository.Repositories.V2
 
                     foreach (var value in values)
                     {
-                        _logger.Debug($"{_classSellRepositoryMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
+                        _logger.LogDebug($"{_classSellRepositoryMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
                     }
                 }
             }

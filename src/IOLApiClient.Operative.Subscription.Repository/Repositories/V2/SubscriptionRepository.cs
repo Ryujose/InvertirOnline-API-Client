@@ -4,8 +4,7 @@ using IOLApiClient.Communication.Abstractions.Models.Interfaces;
 using IOLApiClient.DataStorage.Abstractions;
 using IOLApiClient.Operative.Abstractions.Models;
 using IOLApiClient.Operative.Subscription.Repository.Abstractions.Interfaces.V2;
-using Serilog;
-using Serilog.Events;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -25,12 +24,12 @@ namespace IOLApiClient.Operative.Subscription.Repository.Repositories.V2
         static string _methodBuildSubscriptionURLMessageDiagnose = $"Method: {nameof(BuildSubscriptionURL)}";
 
         private readonly IBearerTokenDataProvider _bearerTokenDataProvider;
-        private readonly ILogger _logger;
+        private readonly ILogger<SubscriptionRepository> _logger;
         private readonly ILoginRepositorySettings _loginRepositorySettings;
 
         public SubscriptionRepository(
             IBearerTokenDataProvider bearerTokenDataProvider,
-            ILogger logger,
+            ILogger<SubscriptionRepository> logger,
             ILoginRepositorySettings loginRepositorySettings)
         {
             _bearerTokenDataProvider = bearerTokenDataProvider;
@@ -44,7 +43,7 @@ namespace IOLApiClient.Operative.Subscription.Repository.Repositories.V2
             {
                 BuildDefaultHeaders(client);
 
-                _logger.Information($"{_classSubscriptionRepositoryMessageDiagnose} {_methodSubscribeFCIMessageDiagnose}, Initializing subscription...");
+                _logger.LogInformation($"{_classSubscriptionRepositoryMessageDiagnose} {_methodSubscribeFCIMessageDiagnose}, Initializing subscription...");
 
                 if (_bearerTokenDataProvider.LoginResponseModel == null)
                     throw new InvalidOperationException($"{nameof(IBearerTokenDataProvider.LoginResponseModel)} is null, can't subscribe.");
@@ -57,7 +56,7 @@ namespace IOLApiClient.Operative.Subscription.Repository.Repositories.V2
                 {
                     var result = await client.PostAsync(BuildSubscriptionURL(), content);
 
-                    _logger.Information($"{_classSubscriptionRepositoryMessageDiagnose} {_methodSubscribeFCIMessageDiagnose}, {(result != null ? $"Subscribe result code: {result.StatusCode}" : "Subscribe is null")}");
+                    _logger.LogInformation($"{_classSubscriptionRepositoryMessageDiagnose} {_methodSubscribeFCIMessageDiagnose}, {(result != null ? $"Subscribe result code: {result.StatusCode}" : "Subscribe is null")}");
 
                     result.EnsureSuccessStatusCode();
 
@@ -98,9 +97,9 @@ namespace IOLApiClient.Operative.Subscription.Repository.Repositories.V2
         {
             var subscriptionURL = $"{_loginRepositorySettings.BaseUrl}/api/v2/operar/Suscripcion/fci";
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.Debug($"{_classSubscriptionRepositoryMessageDiagnose} {_methodBuildSubscriptionURLMessageDiagnose}, subscriptionURL: {subscriptionURL}");
+                _logger.LogDebug($"{_classSubscriptionRepositoryMessageDiagnose} {_methodBuildSubscriptionURLMessageDiagnose}, subscriptionURL: {subscriptionURL}");
             }
 
             return subscriptionURL;
@@ -116,7 +115,7 @@ namespace IOLApiClient.Operative.Subscription.Repository.Repositories.V2
             client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
                 foreach (var defaultRequestHeader in client.DefaultRequestHeaders)
                 {
@@ -124,7 +123,7 @@ namespace IOLApiClient.Operative.Subscription.Repository.Repositories.V2
 
                     foreach (var value in values)
                     {
-                        _logger.Debug($"{_classSubscriptionRepositoryMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
+                        _logger.LogDebug($"{_classSubscriptionRepositoryMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
                     }
                 }
             }

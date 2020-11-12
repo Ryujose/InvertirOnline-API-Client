@@ -3,8 +3,7 @@ using IOLApiClient.Communication.Abstractions.Models;
 using IOLApiClient.Communication.Abstractions.Models.Interfaces;
 using IOLApiClient.DataStorage.Abstractions;
 using IOLApiClient.MyAccount.Operations.Repository.Abstractions.Interfaces.V2;
-using Serilog;
-using Serilog.Events;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -24,12 +23,12 @@ namespace IOLApiClient.MyAccount.Operations.Repository.Repositories.V2
         static string _methodBuildObtainOperationTransactionURLURLMessageDiagnose = $"Method: {nameof(BuildGetTransactionURL)}";
 
         private readonly IBearerTokenDataProvider _bearerTokenDataProvider;
-        private readonly ILogger _logger;
+        private readonly ILogger<OperationsRepository> _logger;
         private readonly ILoginRepositorySettings _loginRepositorySettings;
 
         public OperationsRepository(
             IBearerTokenDataProvider bearerTokenDataProvider,
-            ILogger logger,
+            ILogger<OperationsRepository> logger,
             ILoginRepositorySettings loginRepositorySettings)
         {
             _bearerTokenDataProvider = bearerTokenDataProvider;
@@ -43,7 +42,7 @@ namespace IOLApiClient.MyAccount.Operations.Repository.Repositories.V2
             {
                 BuildDefaultHeaders(client);
 
-                _logger.Information($"{_classOperationsRepositoryMessageDiagnose} {_methodDeleteTransactionMessageDiagnose}, Initializing GetTransaction...");
+                _logger.LogInformation($"{_classOperationsRepositoryMessageDiagnose} {_methodDeleteTransactionMessageDiagnose}, Initializing GetTransaction...");
 
                 if (_bearerTokenDataProvider.LoginResponseModel == null)
                     throw new InvalidOperationException($"{nameof(IBearerTokenDataProvider.LoginResponseModel)} is null, can't get transaction.");
@@ -55,7 +54,7 @@ namespace IOLApiClient.MyAccount.Operations.Repository.Repositories.V2
                 {
                     var result = await client.GetAsync(BuildGetTransactionURL(transactionId));
 
-                    _logger.Information($"{_classOperationsRepositoryMessageDiagnose} {_methodDeleteTransactionMessageDiagnose}, {(result != null ? $"get transaction result code: {result.StatusCode}" : "get transaction is null")}");
+                    _logger.LogInformation($"{_classOperationsRepositoryMessageDiagnose} {_methodDeleteTransactionMessageDiagnose}, {(result != null ? $"get transaction result code: {result.StatusCode}" : "get transaction is null")}");
 
                     result.EnsureSuccessStatusCode();
 
@@ -85,7 +84,7 @@ namespace IOLApiClient.MyAccount.Operations.Repository.Repositories.V2
             {
                 BuildDefaultHeaders(client);
 
-                _logger.Information($"{_classOperationsRepositoryMessageDiagnose} {_methodDeleteTransactionMessageDiagnose}, Initializing DeleteTransaction...");
+                _logger.LogInformation($"{_classOperationsRepositoryMessageDiagnose} {_methodDeleteTransactionMessageDiagnose}, Initializing DeleteTransaction...");
 
                 if (_bearerTokenDataProvider.LoginResponseModel == null)
                     throw new InvalidOperationException($"{nameof(IBearerTokenDataProvider.LoginResponseModel)} is null, can't delete transaction.");
@@ -95,7 +94,7 @@ namespace IOLApiClient.MyAccount.Operations.Repository.Repositories.V2
 
                 var result = await client.DeleteAsync(BuildOperationsDeleteTransactionURL(transactionId));
 
-                _logger.Information($"{_classOperationsRepositoryMessageDiagnose} {_methodDeleteTransactionMessageDiagnose}, {(result != null ? $"delete transaction result code: {result.StatusCode}" : "delete transaction is null")}");
+                _logger.LogInformation($"{_classOperationsRepositoryMessageDiagnose} {_methodDeleteTransactionMessageDiagnose}, {(result != null ? $"delete transaction result code: {result.StatusCode}" : "delete transaction is null")}");
 
                 result.EnsureSuccessStatusCode();
 
@@ -118,9 +117,9 @@ namespace IOLApiClient.MyAccount.Operations.Repository.Repositories.V2
         {
             var BuildOperationsDeleteURL = $"{_loginRepositorySettings.BaseUrl}/api/v2/operaciones/{transactionID}";
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.Debug($"{_classOperationsRepositoryMessageDiagnose} {_methodOperationsDeleteTransactionURLMessageDiagnose}, BuildOperationsDeleteURL: {BuildOperationsDeleteURL}");
+                _logger.LogDebug($"{_classOperationsRepositoryMessageDiagnose} {_methodOperationsDeleteTransactionURLMessageDiagnose}, BuildOperationsDeleteURL: {BuildOperationsDeleteURL}");
             }
 
             return BuildOperationsDeleteURL;
@@ -130,9 +129,9 @@ namespace IOLApiClient.MyAccount.Operations.Repository.Repositories.V2
         {
             var BuildGetTransactionURL = $"{_loginRepositorySettings.BaseUrl}/api/v2/operaciones/{transactionID}";
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.Debug($"{_classOperationsRepositoryMessageDiagnose} {_methodBuildObtainOperationTransactionURLURLMessageDiagnose}, BuildGetTransactionURL: {BuildGetTransactionURL}");
+                _logger.LogDebug($"{_classOperationsRepositoryMessageDiagnose} {_methodBuildObtainOperationTransactionURLURLMessageDiagnose}, BuildGetTransactionURL: {BuildGetTransactionURL}");
             }
 
             return BuildGetTransactionURL;
@@ -148,7 +147,7 @@ namespace IOLApiClient.MyAccount.Operations.Repository.Repositories.V2
             client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
                 foreach (var defaultRequestHeader in client.DefaultRequestHeaders)
                 {
@@ -156,7 +155,7 @@ namespace IOLApiClient.MyAccount.Operations.Repository.Repositories.V2
 
                     foreach (var value in values)
                     {
-                        _logger.Debug($"{_classOperationsRepositoryMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
+                        _logger.LogDebug($"{_classOperationsRepositoryMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
                     }
                 }
             }

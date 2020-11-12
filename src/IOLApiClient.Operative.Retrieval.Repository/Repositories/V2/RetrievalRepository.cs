@@ -4,8 +4,7 @@ using IOLApiClient.Communication.Abstractions.Models.Interfaces;
 using IOLApiClient.DataStorage.Abstractions;
 using IOLApiClient.Operative.Abstractions.Models;
 using IOLApiClient.Operative.Retrieval.Repository.Abstractions.Interfaces.V2;
-using Serilog;
-using Serilog.Events;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -25,12 +24,12 @@ namespace IOLApiClient.Operative.Retrieval.Repository.Repositories.V2
         static string _methodBuildRetrieveURLMessageDiagnose = $"Method: {nameof(BuildRetrieveURL)}";
 
         private readonly IBearerTokenDataProvider _bearerTokenDataProvider;
-        private readonly ILogger _logger;
+        private readonly ILogger<RetrievalRepository> _logger;
         private readonly ILoginRepositorySettings _loginRepositorySettings;
 
         public RetrievalRepository(
             IBearerTokenDataProvider bearerTokenDataProvider,
-            ILogger logger,
+            ILogger<RetrievalRepository> logger,
             ILoginRepositorySettings loginRepositorySettings)
         {
             _bearerTokenDataProvider = bearerTokenDataProvider;
@@ -44,7 +43,7 @@ namespace IOLApiClient.Operative.Retrieval.Repository.Repositories.V2
             {
                 BuildDefaultHeaders(client);
 
-                _logger.Information($"{_classRetrievalRepositoryMessageDiagnose} {_methodRetrieveFCIMessageDiagnose}, Initializing retrieval...");
+                _logger.LogInformation($"{_classRetrievalRepositoryMessageDiagnose} {_methodRetrieveFCIMessageDiagnose}, Initializing retrieval...");
 
                 if (_bearerTokenDataProvider.LoginResponseModel == null)
                     throw new InvalidOperationException($"{nameof(IBearerTokenDataProvider.LoginResponseModel)} is null, can't retrieve.");
@@ -57,7 +56,7 @@ namespace IOLApiClient.Operative.Retrieval.Repository.Repositories.V2
                 {
                     var result = await client.PostAsync(BuildRetrieveURL(), content);
 
-                    _logger.Information($"{_classRetrievalRepositoryMessageDiagnose} {_methodRetrieveFCIMessageDiagnose}, {(result != null ? $"Retrieve result code: {result.StatusCode}" : "Retrieve is null")}");
+                    _logger.LogInformation($"{_classRetrievalRepositoryMessageDiagnose} {_methodRetrieveFCIMessageDiagnose}, {(result != null ? $"Retrieve result code: {result.StatusCode}" : "Retrieve is null")}");
 
                     result.EnsureSuccessStatusCode();
 
@@ -98,9 +97,9 @@ namespace IOLApiClient.Operative.Retrieval.Repository.Repositories.V2
         {
             var retrieveURL = $"{_loginRepositorySettings.BaseUrl}/api/v2/operar/Rescate/fci";
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.Debug($"{_classRetrievalRepositoryMessageDiagnose} {_methodBuildRetrieveURLMessageDiagnose}, retrieveURL: {retrieveURL}");
+                _logger.LogDebug($"{_classRetrievalRepositoryMessageDiagnose} {_methodBuildRetrieveURLMessageDiagnose}, retrieveURL: {retrieveURL}");
             }
 
             return retrieveURL;
@@ -116,7 +115,7 @@ namespace IOLApiClient.Operative.Retrieval.Repository.Repositories.V2
             client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
                 foreach (var defaultRequestHeader in client.DefaultRequestHeaders)
                 {
@@ -124,7 +123,7 @@ namespace IOLApiClient.Operative.Retrieval.Repository.Repositories.V2
 
                     foreach (var value in values)
                     {
-                        _logger.Debug($"{_classRetrievalRepositoryMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
+                        _logger.LogDebug($"{_classRetrievalRepositoryMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
                     }
                 }
             }
