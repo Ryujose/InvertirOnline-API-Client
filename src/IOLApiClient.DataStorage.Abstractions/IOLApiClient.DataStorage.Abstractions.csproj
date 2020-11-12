@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Copyright>MIT License - Copyright (c) 2020 Jose Luis Guerra Infante</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageProjectUrl>https://github.com/Ryujose/InvertirOnline-API-Client</PackageProjectUrl>
@@ -16,8 +16,11 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryType>OpenSource</RepositoryType>
     <RepositoryUrl>https://github.com/Ryujose/InvertirOnline-API-Client</RepositoryUrl>
-    <PackageReleaseNotes>Abastractions of BearerTokenData</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated to .NET 5.0
+
+Use of .NET extension ILogger instead of serilog</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

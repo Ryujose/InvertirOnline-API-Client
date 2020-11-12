@@ -2,8 +2,7 @@
 using IOLApiClient.Auth.Repository.Abstractions.Interfaces;
 using IOLApiClient.Auth.Repository.Abstractions.Models;
 using IOLApiClient.DataStorage.Abstractions;
-using Serilog;
-using Serilog.Events;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -31,12 +30,12 @@ namespace IOLApiClient.Auth.Repository.Repositories
 
         private readonly ILoginRepositorySettings _loginRepositorySettings;
         private readonly IBearerTokenDataProvider _bearerTokenData;
-        private readonly ILogger _logger;
+        private readonly ILogger<LoginRepository> _logger;
 
         public LoginRepository(
             ILoginRepositorySettings loginRepositorySettings,
             IBearerTokenDataProvider bearerTokenData,
-            ILogger logger
+            ILogger<LoginRepository> logger
             )
         {
             _loginRepositorySettings = loginRepositorySettings;
@@ -49,7 +48,7 @@ namespace IOLApiClient.Auth.Repository.Repositories
         /// </summary>
         public async Task Login()
         {
-            _logger.Information($"{_classLogMessageDiagnose} {_methodLoginMessageDiagnose}, Initializing login...");
+            _logger.LogInformation($"{_classLogMessageDiagnose} {_methodLoginMessageDiagnose}, Initializing login...");
 
             if (string.IsNullOrEmpty(_loginRepositorySettings.UserNameIOLClient))
                 throw new InvalidOperationException($"{nameof(ILoginRepositorySettings.UserNameIOLClient)} is null or empty, can't login.");
@@ -70,13 +69,13 @@ namespace IOLApiClient.Auth.Repository.Repositories
 
                     var result = await client.PostAsync(BuildTokenURL(), content);
 
-                    _logger.Information($"{_classLogMessageDiagnose} {_methodLoginMessageDiagnose}, {(result != null ? $"Login result code: {result.StatusCode}" : "Login result is null")}");
+                    _logger.LogInformation($"{_classLogMessageDiagnose} {_methodLoginMessageDiagnose}, {(result != null ? $"Login result code: {result.StatusCode}" : "Login result is null")}");
 
                     result.EnsureSuccessStatusCode();
 
                     var loginResponseModel = await JsonSerializer.DeserializeAsync<LoginResponseModel>(await result.Content.ReadAsStreamAsync());
 
-                    _logger.Debug($"{_classLogMessageDiagnose} {_methodLoginMessageDiagnose}, login responde model deserialized");
+                    _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLoginMessageDiagnose}, login responde model deserialized");
 
                     loginResponseModel.IssuedDateTime = Convert.ToDateTime(loginResponseModel.Issued);
                     loginResponseModel.RefreshExpiresDateTime = Convert.ToDateTime(loginResponseModel.RefreshExpires);
@@ -91,18 +90,18 @@ namespace IOLApiClient.Auth.Repository.Repositories
 
         private void LogLoginRespondeModel(LoginResponseModel loginResponseModel)
         {
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.AccesToken)}: {loginResponseModel.AccesToken}");
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.Expires)}: {loginResponseModel.Expires}");
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.ExpiresDateTime)}: {loginResponseModel.ExpiresDateTime}");
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.ExpiresIn)}: {loginResponseModel.ExpiresIn}");
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.Issued)}: {loginResponseModel.Issued}");
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.IssuedDateTime)}: {loginResponseModel.IssuedDateTime}");
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.RefreshExpires)}: {loginResponseModel.RefreshExpires}");
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.RefreshExpiresDateTime)}: {loginResponseModel.RefreshExpiresDateTime}");
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.RefreshToken)}: {loginResponseModel.RefreshToken}");
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.TokenType)}: {loginResponseModel.TokenType}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.AccesToken)}: {loginResponseModel.AccesToken}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.Expires)}: {loginResponseModel.Expires}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.ExpiresDateTime)}: {loginResponseModel.ExpiresDateTime}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.ExpiresIn)}: {loginResponseModel.ExpiresIn}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.Issued)}: {loginResponseModel.Issued}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.IssuedDateTime)}: {loginResponseModel.IssuedDateTime}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.RefreshExpires)}: {loginResponseModel.RefreshExpires}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.RefreshExpiresDateTime)}: {loginResponseModel.RefreshExpiresDateTime}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.RefreshToken)}: {loginResponseModel.RefreshToken}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodLogLoginRespondeModelMessageDiagnose}, parameter {nameof(LoginResponseModel.TokenType)}: {loginResponseModel.TokenType}");
             }
         }
 
@@ -110,9 +109,9 @@ namespace IOLApiClient.Auth.Repository.Repositories
         {
             var tokenURL = $"{_loginRepositorySettings.BaseUrl}/token";
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.Debug($"{_classLogMessageDiagnose} {_methodBuildTokenURLMessageDiagnose}, tokenURL: {tokenURL}");
+                _logger.LogDebug($"{_classLogMessageDiagnose} {_methodBuildTokenURLMessageDiagnose}, tokenURL: {tokenURL}");
             }
 
             return tokenURL;
@@ -123,7 +122,7 @@ namespace IOLApiClient.Auth.Repository.Repositories
             content.Headers.Clear();
             content.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
                 foreach (var header in content.Headers)
                 {
@@ -131,7 +130,7 @@ namespace IOLApiClient.Auth.Repository.Repositories
 
                     foreach (var value in values)
                     {
-                        _logger.Debug($"{_classLogMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, content header assigned key: {header.Key}, value: {value}");
+                        _logger.LogDebug($"{_classLogMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, content header assigned key: {header.Key}, value: {value}");
                     }
                 }
             }
@@ -146,11 +145,11 @@ namespace IOLApiClient.Auth.Repository.Repositories
                 { _GRANT_TYPE_POST_KEY, _GRANT_TYPE_LOGIN_POST_VALUE }
             };
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
                 foreach (var item in result)
                 {
-                    _logger.Debug($"{_classLogMessageDiagnose} {_methodBuildLoginPostParametersMessageDiagnose}, parameters post key: {item.Key}, value: {item.Value}");
+                    _logger.LogDebug($"{_classLogMessageDiagnose} {_methodBuildLoginPostParametersMessageDiagnose}, parameters post key: {item.Key}, value: {item.Value}");
                 }
             }
 
@@ -166,7 +165,7 @@ namespace IOLApiClient.Auth.Repository.Repositories
             client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
                 foreach (var defaultRequestHeader in client.DefaultRequestHeaders)
                 {
@@ -174,7 +173,7 @@ namespace IOLApiClient.Auth.Repository.Repositories
 
                     foreach (var value in values)
                     {
-                        _logger.Debug($"{_classLogMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
+                        _logger.LogDebug($"{_classLogMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
                     }
                 }
             }

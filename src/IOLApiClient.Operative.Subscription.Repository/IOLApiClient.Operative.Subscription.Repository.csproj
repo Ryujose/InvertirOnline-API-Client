@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>MIT License - Copyright (c) 2020 Jose Luis Guerra Infante</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
@@ -19,12 +19,11 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryType>OpenSource</RepositoryType>
     <RepositoryUrl>https://github.com/Ryujose/InvertirOnline-API-Client</RepositoryUrl>
-    <PackageReleaseNotes>Implementation of subscription</PackageReleaseNotes>
-  </PropertyGroup>
+    <PackageReleaseNotes>Updated to .NET 5.0
 
-  <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.9.0" />
-  </ItemGroup>
+Use of .NET extension ILogger instead of serilog</PackageReleaseNotes>
+    <Version>2.0.0</Version>
+  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\IOLApiClient.Communication.Abstractions\IOLApiClient.Communication.Abstractions.csproj" />
@@ -42,5 +41,9 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
   </ItemGroup>
 </Project>

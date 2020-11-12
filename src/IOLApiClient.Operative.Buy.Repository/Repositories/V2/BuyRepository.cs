@@ -4,8 +4,7 @@ using IOLApiClient.Communication.Abstractions.Models.Interfaces;
 using IOLApiClient.DataStorage.Abstractions;
 using IOLApiClient.Operative.Abstractions.Models;
 using IOLApiClient.Operative.Buy.Repository.Abstractions.Interfaces.V2;
-using Serilog;
-using Serilog.Events;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -25,12 +24,12 @@ namespace IOLApiClient.Operative.Buy.Repository.Repositories.V2
         static string _methodBuildBuyURLMessageDiagnose = $"Method: {nameof(BuildBuyURL)}";
 
         private readonly IBearerTokenDataProvider _bearerTokenDataProvider;
-        private readonly ILogger _logger;
+        private readonly ILogger<BuyRepository> _logger;
         private readonly ILoginRepositorySettings _loginRepositorySettings;
 
         public BuyRepository(
             IBearerTokenDataProvider bearerTokenDataProvider,
-            ILogger logger,
+            ILogger<BuyRepository> logger,
             ILoginRepositorySettings loginRepositorySettings)
         {
             _bearerTokenDataProvider = bearerTokenDataProvider;
@@ -44,7 +43,7 @@ namespace IOLApiClient.Operative.Buy.Repository.Repositories.V2
             {
                 BuildDefaultHeaders(client);
 
-                _logger.Information($"{_classBuyRepositoryMessageDiagnose} {_methodBuyMessageDiagnose}, Initializing buy...");
+                _logger.LogInformation($"{_classBuyRepositoryMessageDiagnose} {_methodBuyMessageDiagnose}, Initializing buy...");
 
                 if (_bearerTokenDataProvider.LoginResponseModel == null)
                     throw new InvalidOperationException($"{nameof(IBearerTokenDataProvider.LoginResponseModel)} is null, can't buy.");
@@ -57,7 +56,7 @@ namespace IOLApiClient.Operative.Buy.Repository.Repositories.V2
                 {
                     var result = await client.PostAsync(BuildBuyURL(), content);
 
-                    _logger.Information($"{_classBuyRepositoryMessageDiagnose} {_methodBuyMessageDiagnose}, {(result != null ? $"Buy result code: {result.StatusCode}" : "Buy is null")}");
+                    _logger.LogInformation($"{_classBuyRepositoryMessageDiagnose} {_methodBuyMessageDiagnose}, {(result != null ? $"Buy result code: {result.StatusCode}" : "Buy is null")}");
 
                     result.EnsureSuccessStatusCode();
 
@@ -97,9 +96,9 @@ namespace IOLApiClient.Operative.Buy.Repository.Repositories.V2
         {
             var buyURL = $"{_loginRepositorySettings.BaseUrl}/api/v2/operar/Comprar";
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.Debug($"{_classBuyRepositoryMessageDiagnose} {_methodBuildBuyURLMessageDiagnose}, BuildBuyURL: {buyURL}");
+                _logger.LogDebug($"{_classBuyRepositoryMessageDiagnose} {_methodBuildBuyURLMessageDiagnose}, BuildBuyURL: {buyURL}");
             }
 
             return buyURL;
@@ -115,7 +114,7 @@ namespace IOLApiClient.Operative.Buy.Repository.Repositories.V2
             client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
 
-            if (_logger.IsEnabled(LogEventLevel.Debug))
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
                 foreach (var defaultRequestHeader in client.DefaultRequestHeaders)
                 {
@@ -123,7 +122,7 @@ namespace IOLApiClient.Operative.Buy.Repository.Repositories.V2
 
                     foreach (var value in values)
                     {
-                        _logger.Debug($"{_classBuyRepositoryMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
+                        _logger.LogDebug($"{_classBuyRepositoryMessageDiagnose} {_methodBuildDefaultHeadersMessageDiagnose}, default header assigned key: {defaultRequestHeader.Key}, value: {value}");
                     }
                 }
             }
