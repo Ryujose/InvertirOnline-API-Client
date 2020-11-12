@@ -1,47 +1,53 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Copyright>MIT License - Copyright (c) 2020 Jose Luis Guerra Infante</Copyright>
-    <NeutralLanguage>en</NeutralLanguage>
-    <PackageProjectUrl>https://github.com/Ryujose/InvertirOnline-API-Client</PackageProjectUrl>
-    <Company />
-    <Authors>Jose Luis Guerra Infante</Authors>
-    <Product>invertirOnline.com API Authorization lib</Product>
-    <Description>
-      With these lib you can do a retrieval of a subscription on https://www.invertironline.com/ company.
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Copyright>MIT License - Copyright (c) 2020 Jose Luis Guerra Infante</Copyright>
+		<NeutralLanguage>en</NeutralLanguage>
+		<PackageProjectUrl>https://github.com/Ryujose/InvertirOnline-API-Client</PackageProjectUrl>
+		<Company />
+		<Authors>Jose Luis Guerra Infante</Authors>
+		<Product>invertirOnline.com API Authorization lib</Product>
+		<Description>
+			With these lib you can do a retrieval of a subscription on https://www.invertironline.com/ company.
 
-      To do these you've to create the account and enable the API product.
-    </Description>
-    <PackageIcon>IOLAPIClientICO.PNG</PackageIcon>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <RepositoryType>OpenSource</RepositoryType>
-    <RepositoryUrl>https://github.com/Ryujose/InvertirOnline-API-Client</RepositoryUrl>
-    <PackageReleaseNotes>Updated to .NET 5.0
+			To do these you've to create the account and enable the API product.
+		</Description>
+		<PackageIcon>IOLAPIClientICO.PNG</PackageIcon>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<RepositoryType>OpenSource</RepositoryType>
+		<RepositoryUrl>https://github.com/Ryujose/InvertirOnline-API-Client</RepositoryUrl>
+		<PackageReleaseNotes>
+			Updated to .NET 5.0
 
-Use of .NET extension ILogger instead of serilog</PackageReleaseNotes>
-    <Version>2.0.0</Version>
-  </PropertyGroup>
+			Use of .NET extension ILogger instead of serilog
+		</PackageReleaseNotes>
+		<Version>2.0.0</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\IOLApiClient.DataStorage.Abstractions\IOLApiClient.DataStorage.Abstractions.csproj" />
-    <ProjectReference Include="..\IOLApiClient.Operative.Retrieval.Repository.Abstractions\IOLApiClient.Operative.Retrieval.Repository.Abstractions.csproj" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>C:\Git\IOLApiClient\IOLApiClient\packages\</OutputPath>
+	</PropertyGroup>
 
-<ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\..\IOLAPIClientICO.PNG">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\IOLApiClient.DataStorage.Abstractions\IOLApiClient.DataStorage.Abstractions.csproj" />
+		<ProjectReference Include="..\IOLApiClient.Operative.Retrieval.Repository.Abstractions\IOLApiClient.Operative.Retrieval.Repository.Abstractions.csproj" />
+	</ItemGroup>
 
-<ItemGroup>
-  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-</ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\..\IOLAPIClientICO.PNG">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+	</ItemGroup>
 </Project>
